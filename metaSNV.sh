@@ -93,7 +93,7 @@ metaSNV.py --threads 30  NC_010175_metaSNV NC_010175_bam.list references/NC_0101
 
 metaSNV_Filtering.py --n_threads 30 NC_010175_metaSNV
 
-metaSNV_DistDiv.py --n_threads 30 --dist --filt NC_010175_metaSNV/filtered/pop/
+metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt NC_010175_metaSNV/filtered/pop/
 
 
 #### FIX ###
