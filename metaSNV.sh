@@ -80,7 +80,7 @@ for f in *fna; do perl ../contigs_joiner.pl $f > ${f%.fna}\_J.fna; done
 coverm genome --methods length covered_bases count mean relative_abundance rpkm --min-read-aligned-length 45 --min-read-percent-identity 97 --min-covered-fraction 0 --discard-unmapped --output-format sparse --genome-fasta-files references/NC_009767.fna --genome-fasta-extension fna --bam-file-cache-directory NC_009767_MGTA --threads 90 --output-file NC_009767_MGTA.txt -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto10_GGTCACGA-GTATTATG_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto10_GGTCACGA-GTATTATG_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto11_48_dna_GAATCCGTGG-TCACATGAGA_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto11_48_dna_GAATCCGTGG-TCACATGAGA_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto11_62_dna_ACGTGAACAT-ACTAGCCGTG_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto11_62_dna_ACGTGAACAT-ACTAGCCGTG_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto11_CTGCTTCC-GATAGATC_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto11_CTGCTTCC-GATAGATC_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto12_TCATCCTT-AGCGAGCT_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto12_TCATCCTT-AGCGAGCT_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto13_AGGTTATA-CAGTTCCG_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto13_AGGTTATA-CAGTTCCG_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto1_CAATTAAC-CGAGATAT_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto1_CAATTAAC-CGAGATAT_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto2_TGGCCGGT-TAGAGCGC_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto2_TGGCCGGT-TAGAGCGC_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto3_AGTACTCC-AACCTGTT_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto3_AGTACTCC-AACCTGTT_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto4_GACGTCTT-GGTTCACC_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto4_GACGTCTT-GGTTCACC_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto5_TGCGAGAC-CATTGTTG_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto5_TGCGAGAC-CATTGTTG_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto6_CATAGAGT-TGCCACCA_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto6_CATAGAGT-TGCCACCA_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto7_ACAGGCGC-CTCTGCCT_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto7_ACAGGCGC-CTCTGCCT_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto8_GTGAATAT-TCTCATTC_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto8_GTGAATAT-TCTCATTC_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto9_AACTGTAG-ACGCCGCA_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto9_AACTGTAG-ACGCCGCA_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto_3_45_dna_CTCGAAGGAA-CGAGGCCTAT_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto_3_45_dna_CTCGAAGGAA-CGAGGCCTAT_L001_R2_001_TRIM.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/T60_TAT2020_1.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/T60_TAT2020_2.fq -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/T82_TAT2020_1.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/T82_TAT2020_2.fq
 
 #check headers
-samtools view -H coverm-genome.Pto10_GGTCACGA-GTATTATG_L001_R1_001_TRIM.fq.bam > header.sam
+samtools view -H coverm-genome.S16_2020_1.fq.gz.bam > header.sam && nano header.sam
 
 #si no coincide con el header de la referencia
 
@@ -107,6 +107,11 @@ parallel --jobs 4 ' agat_convert_sp_gxf2gxf.pl -g {} -o {}.gff3' ::: *gtf
 
 #edit gff3 solo dejar 1 comment tline
 nano gff2metaSNV_annotation.py
+
+#example
+samtools view -H coverm-genome.S16_2020_1.fq.gz.bam > header.sam && nano header.sam
+parallel --jobs 10 'samtools reheader header.sam {} > {}.rehead' ::: *bam
+rm *bam && rename 's/.rehead//' *rehead && rm header.sam && cd ../ && ls
 
 ##gff-version 3
 NC_010175       RefSeq  gene    336     1775    .       +       .       ID=CAUR_RS00005;gbkey=Gene;gene=dnaA;gene_biotype=protein_coding;gene_id=CAUR_RS00005;locus_tag=CAUR_RS00005;old_locus_tag=Caur_0001;transcript_id=""
@@ -140,10 +145,47 @@ samtools faidx NC_010175.fna
 
 
 #run metaSNV
-metaSNV.py --threads 30  NC_010175_metaSNV NC_010175_bam.list references/NC_010175.fna --db_ann metaSNV_anntotations/NC_010175_metaSNV_anntotations.txt
+metaSNV.py --threads 96  NC_010175_metaSNV NC_010175_bam.list references/NC_010175.fna --db_ann metaSNV_anntotations/NC_010175_metaSNV_anntotations.txt
 
 metaSNV_Filtering.py --n_threads 30 NC_010175_metaSNV
 
 metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt NC_010175_metaSNV/filtered/pop/
 
 metaSNV_subpopr.R -i NC_010175_metaSNV -p 12
+
+
+
+
+#########################3
+#########################3
+
+
+#coverM
+for f in *fna; do echo coverm genome --methods length covered_bases count mean relative_abundance rpkm --min-read-aligned-length 45 --min-read-percent-identity 97 --min-covered-fraction 0 --discard-unmapped --output-format sparse --genome-fasta-files $f --genome-fasta-extension fna --bam-file-cache-directory bam_${f%.fna} --threads 96 --output-file ${f%.fna}.tsv -1 ../FASTQ_MG/S4_2019_1.fq.gz -2 ../FASTQ_MG/S4_2019_2.fq.gz -1 ../FASTQ_MG/S6_2019_1.fq.gz -2 ../FASTQ_MG/S6_2019_2.fq.gz -1 ../FASTQ_MG/S7_2020_1.fq.gz -2 ../FASTQ_MG/S7_2020_2.fq.gz -1 ../FASTQ_MG/S8_2019_1.fq.gz -2 ../FASTQ_MG/S8_2019_2.fq.gz -1 ../FASTQ_MG/S16_2020_1.fq.gz -2 ../FASTQ_MG/S16_2020_2.fq.gz -1 ../FASTQ_MG/S17_2020_1.fq.gz -2 ../FASTQ_MG/S17_2020_2.fq.gz; done
+
+#get gff
+for f in *fna; do prodigal -i $f -f gff -o ${f%.fna}.gff -a ${f%.fna}.faa; done
+
+#fix header
+samtools view -H coverm-genome.S16_2020_1.fq.gz.bam > header.sam && nano header.sam
+parallel --jobs 10 'samtools reheader header.sam {} > {}.rehead' ::: *bam
+rm *bam && rename 's/.rehead//' *rehead && rm header.sam && cd ../ && ls
+
+#sort
+for f in bam_S*/*bam; do samtools sort -@ 96 -o ${f%.bam}.sorted.bam $f; done
+
+#index
+for f in bam_S*/*sorted.bam; do samtools index -@ 96 $f; done
+
+#make list
+for f in bam*; do ls -d $PWD/$f/*sorted.bam > $f\_list_bams.txt; done
+
+#run shit 1
+for f in *fna; do metaSNV.py --threads 96 ${f%.fna}\_metaSNV bam_${f%.fna}\_list_bams.txt $f; done
+
+#run shit 2
+for f in *_metaSNV; do metaSNV_Filtering.py --n_threads 96 $f; done
+
+#run shit 3 (whitot nd/ds now so no gff)
+#metaSNV_DistDiv.py --n_threads 90 --dist --div --divNS --matched --filt S4_2019_Vamb_2_J_metaSNV/filtered/pop/
+for f in *_metaSNV; do metaSNV_DistDiv.py --n_threads 90 --dist --div --matched --filt $f/filtered/pop/; done
