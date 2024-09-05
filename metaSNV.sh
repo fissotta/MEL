@@ -94,7 +94,7 @@ samtools view -H coverm-genome.Pto10_GGTCACGA-GTATTATG_L001_R1_001_TRIM.fq.bam >
 
 parallel --jobs 20 'samtools reheader header.sam {} > {}.rehead' ::: *bam
 
-rm *bam && rename 's/.rehead//' *rehead
+rm *bam && rename 's/.rehead//' *rehead && rm header.sam
 
 #sort
 for f in *bam; do samtools sort -@ 30 -o ${f%.bam}.sorted.bam $f; done
