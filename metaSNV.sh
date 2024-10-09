@@ -154,6 +154,9 @@ metaSNV.py --threads 96  NC_010175_metaSNV NC_010175_bam.list references/NC_0101
 
 metaSNV_Filtering.py --n_threads 30 NC_010175_metaSNV
 
+###LB FIX##
+awk '{ delete_line=0; for (i=2; i<=NF; i++) if (($i+0) > 0 && ($i+0) < 0.05) { delete_line=1; break } } !delete_line'  S3_2020_Vamb_5.filtered.freq > S3_2020_Vamb_5.filtered_LB.freq
+
 metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt NC_010175_metaSNV/filtered/pop/
 
 metaSNV_subpopr.R -i NC_010175_metaSNV -p 12
