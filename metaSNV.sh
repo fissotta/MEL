@@ -104,6 +104,8 @@ for f in *sorted.bam; do samtools index -@ 30 $f; done
 
 #prodigal
 for file in *.fasta; do prodigal -i "$file" -o "${file%.fasta}.gff" -f gff -a "${file%.fasta}_proteins.faa"; done
+sed -i '/Model/d' *gff
+sed -i '/Sequence/d' *gff
 
 #annotations gtf to gff3
 parallel --jobs 4 ' agat_convert_sp_gxf2gxf.pl -g {} -o {}.gff3' ::: *gtf
