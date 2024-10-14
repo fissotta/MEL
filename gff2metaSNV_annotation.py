@@ -12,6 +12,9 @@ if len(sys.argv) != 2:
 # Get the input GFF file from command-line argument
 input_gff = sys.argv[1]
 
+# Get the base name of the input file (without extension)
+input_base_name = os.path.splitext(os.path.basename(input_gff))[0]
+
 # Get the current directory as the output folder
 output_folder = os.getcwd() + "/"
 
@@ -79,5 +82,8 @@ for i in range(len(metaSNV)):
     metaSNV.loc[i, "external_id"] = "{}.{}".format(metaSNV.loc[i, "sequence_id"], count_seqid[metaSNV.loc[i, "sequence_id"]])
     metaSNV.loc[i, "gene_id"] = i + 1
 
-# Output the transformed .gff data into a metaSNV annotation file
-metaSNV.to_csv(output_folder + "metaSNV_annotations.txt", mode="w+", sep="\t", index=False)
+# Construct the output file name by appending "_metaSNV_annotations.txt" to the base name
+output_file = f"{output_folder}{input_base_name}_metaSNV_annotations.txt"
+
+# Output the transformed .gff data into the metaSNV annotation file
+metaSNV.to_csv(output_file, mode="w+", sep="\t", index=False)
