@@ -107,21 +107,19 @@ coverm genome --methods length covered_bases count mean relative_abundance rpkm 
 coverm contig --methods length covered_bases covered_fraction reads_per_base count mean trimmed_mean rpkm tpm variance --include-secondary --min-read-aligned-length 45 --min-read-percent-identity 97 --min-covered-fraction 0 --discard-unmapped --output-format sparse --sharded --reference references --bam-file-cache-directory bams_coverm --threads 60 --output-file AFP_ICO_FCA_coverm.txt -1 /media/WALLROSE/FASTQ_MG/LSM1_2019_1.fq -2 /media/WALLROSE/FASTQ_MG/LSM1_2019_2.fq ...
 ```
 
-### Check Headers
+### Check Headers if the header does not match the reference
 
 ```bash
 # Extract and modify SAM header
 for f in *bam; do samtools view -H $f > ${f%.bam}.head; done
-samtools view -H coverm-genome.S16_2020_1.fq.gz.bam > header.sam && nano header.sam
+sed -i -E '/^@SQ/ s/(SN:[^~[:space:]]+)~[^[:space:]]*/\1/' *head
+for f in *head; do samtools reheader $f ${f%.head}\.bam > ${f%.head}\.bam_reheaded; done
+rm *bam && rm *head && rename 's/_reheaded//' *reheaded
+
+#parallel --jobs 20 'samtools reheader header.sam {} > {}.rehead' ::: *bam
+#samtools view -H coverm-genome.S16_2020_1.fq.gz.bam > header.sam && nano header.sam
 ```
 
-If the header does not match the reference:
-```bash
-# Replace SAM header in all BAM files
-sed -i -E '/^@SQ/ s/(SN:[^~[:space:]]+)~[^[:space:]]*/\1/' filename
-parallel --jobs 20 'samtools reheader header.sam {} > {}.rehead' ::: *bam
-rm *bam && rename 's/.rehead//' *rehead && rm header.sam
-```
 
 ### Sort and Index BAM Files
 
