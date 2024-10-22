@@ -97,6 +97,7 @@ sed -i 's/\.fna//g' *_J.fna
 
 ### CoverM Genome Coverage
 
+##Considerar drep % identidad para el parametro --min-read-percent-identity, si es muy alto se pierde microdiversidad
 ```bash
 coverm genome --methods length covered_bases count mean relative_abundance rpkm --min-read-aligned-length 45 --min-read-percent-identity 97 --min-covered-fraction 0 --discard-unmapped --output-format sparse --genome-fasta-files references/NC_009767.fna --genome-fasta-extension fna --bam-file-cache-directory NC_009767_MGTA --threads 90 --output-file NC_009767_MGTA.txt -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto10_GGTCACGA-GTATTATG_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto10_GGTCACGA-GTATTATG_L001_R2_001_TRIM.fq
 ```
