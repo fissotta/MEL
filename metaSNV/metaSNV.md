@@ -144,6 +144,15 @@ sed -i '/Model/d' *gff
 sed -i '/Sequence/d' *gff
 ```
 
+
+### GFF to metasnv format
+
+```bash
+# run gff2metaSNV_annotation.py
+parallel --jobs 60 'python3 gff2metaSNV_annotation.py {}' ::: *gff
+
+```
+
 ### Convert GTF to GFF3
 
 ```bash
