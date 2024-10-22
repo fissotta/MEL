@@ -111,12 +111,14 @@ coverm contig --methods length covered_bases covered_fraction reads_per_base cou
 
 ```bash
 # Extract and modify SAM header
+for f in *bam; do samtools view -H $f > ${f%.bam}.head; done
 samtools view -H coverm-genome.S16_2020_1.fq.gz.bam > header.sam && nano header.sam
 ```
 
 If the header does not match the reference:
 ```bash
 # Replace SAM header in all BAM files
+sed -i -E '/^@SQ/ s/(SN:[^~[:space:]]+)~[^[:space:]]*/\1/' filename
 parallel --jobs 20 'samtools reheader header.sam {} > {}.rehead' ::: *bam
 rm *bam && rename 's/.rehead//' *rehead && rm header.sam
 ```
