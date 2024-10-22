@@ -82,7 +82,7 @@ bpParam <- MulticoreParam(workers = min(N.CORES,length(species)),
                           logdir = paste0(OUT.DIR,"/threadLogs"))
 ```
 
-## Input Preparation
+# Input Preparation
 
 ### Join with 100 Ns
 
