@@ -102,13 +102,17 @@ sed -i 's/\.fna//g' *_J.fna
 ##Referencias headers replace . with _
 
 ```bash
+#Ciclo
+while read l; do while read i; do echo coverm genome --methods length covered_bases covered_fraction count mean relative_abundance rpkm --min-read-aligned-length 45 --min-read-percent-identity 97 --min-covered-fraction 0 --discard-unmapped --output-format sparse --threads 60 --genome-fasta-files referencias/$l --genome-fasta-extension fna --bam-file-cache-directory ${l%.fna}\_COVERM --output-file ${l%.fna}\_COVERM.txt $i; done < mags.txt ; done < REFERENCES.txt > COVERM_FCA_ICO_AVP.sh
+
+#Comando
 coverm genome --methods length covered_bases count mean relative_abundance rpkm --min-read-aligned-length 45 --min-read-percent-identity 97 --min-covered-fraction 0 --discard-unmapped --output-format sparse --genome-fasta-files references/NC_009767.fna --genome-fasta-extension fna --bam-file-cache-directory NC_009767_MGTA --threads 90 --output-file NC_009767_MGTA.txt -1 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto10_GGTCACGA-GTATTATG_L001_R1_001_TRIM.fq -2 ../DATA_PD/MGTA/TRIMMED/PAIRED/Pto10_GGTCACGA-GTATTATG_L001_R2_001_TRIM.fq
 ```
 
 ### CoverM Contigs
 
 ```bash
-coverm contig --methods length covered_bases covered_fraction reads_per_base count mean trimmed_mean rpkm tpm variance --include-secondary --min-read-aligned-length 45 --min-read-percent-identity 97 --min-covered-fraction 0 --discard-unmapped --output-format sparse --sharded --reference references --bam-file-cache-directory bams_coverm --threads 60 --output-file AFP_ICO_FCA_coverm.txt -1 /media/WALLROSE/FASTQ_MG/LSM1_2019_1.fq -2 /media/WALLROSE/FASTQ_MG/LSM1_2019_2.fq ...
+#coverm contig --methods length covered_bases covered_fraction reads_per_base count mean trimmed_mean rpkm tpm variance --include-secondary --min-read-aligned-length 45 --min-read-percent-identity 97 --min-covered-fraction 0 --discard-unmapped --output-format sparse --sharded --reference references --bam-file-cache-directory bams_coverm --threads 60 --output-file AFP_ICO_FCA_coverm.txt -1 /media/WALLROSE/FASTQ_MG/LSM1_2019_1.fq -2 /media/WALLROSE/FASTQ_MG/LSM1_2019_2.fq ...
 ```
 
 ### Check Headers if the header does not match the reference
@@ -182,10 +186,22 @@ samtools faidx NC_010175.fna
 # Running metaSNV
 
 ```bash
+# metaSNV run
+ls referencias/*fna > REFERENCES.txt
 while read l; do ls bams_coverm\/*$l* > $l\_bam.list ; done < REFERENCES.txt
+
 while read l; do echo metaSNV.py --threads 90 $l\_mSNV $l\_bam.list referencias/$l\_J.fna --db_ann referencias/$l\_J_metaSNV_annotations.txt; done < REFERENCES.txt > COVERM_CTFIA.sh
 
+# MetaSNV Filtering
 for f in *_mSNV/; do metaSNV_Filtering.py --n_threads 30 $f; done
+
+# Filter using AWK script
+awk '{ delete_line=0; for (i=2; i<=NF; i++) if (($i+0) > 0 && ($i+0) < 0.05) { delete_line=1; break } } !delete_line'  S3_2020_Vamb_5.filtered.freq > S3_2020_Vamb_5.filtered_LB.freq
+
+# Run DistDiv
+metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt NC_010175_metaSNV/filtered/pop/
+
+
 ```
 
 ```bash
