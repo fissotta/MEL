@@ -179,6 +179,12 @@ samtools faidx NC_010175.fna
 ### Running metaSNV
 
 ```bash
+while read l; do ls bams_coverm\/*$l* > $l\_bam.list ; done < REFERENCES.txt
+while read l; do echo metaSNV.py --threads 90 $l\_mSNV $l\_bam.list referencias/$l\_J.fna --db_ann referencias/$l\_J_metaSNV_annotations.txt; done < REFERENCES.txt > COVERM_CTFIA.sh
+
+```
+
+```bash
 # Example run
 metaSNV.py --threads 96 NC_010175_metaSNV NC_010175_bam.list references/NC_010175.fna --db_ann metaSNV_anntotations/NC_010175_metaSNV_anntotations.txt
 
