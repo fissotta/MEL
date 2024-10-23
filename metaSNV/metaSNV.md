@@ -179,12 +179,13 @@ mamba activate metaSNV
 samtools faidx NC_010175.fna
 ```
 
-### Running metaSNV
+# Running metaSNV
 
 ```bash
 while read l; do ls bams_coverm\/*$l* > $l\_bam.list ; done < REFERENCES.txt
 while read l; do echo metaSNV.py --threads 90 $l\_mSNV $l\_bam.list referencias/$l\_J.fna --db_ann referencias/$l\_J_metaSNV_annotations.txt; done < REFERENCES.txt > COVERM_CTFIA.sh
 
+for f in *_mSNV/; do echo metaSNV_Filtering.py --n_threads 30 $f; don
 ```
 
 ```bash
