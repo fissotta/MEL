@@ -159,7 +159,7 @@ for f in *bam; do samtools sort -@ 30 -o ${f%.bam}.sorted.bam $f; done
 for f in *sorted.bam; do samtools index -@ 30 $f; done
 ```
 
-### Split bams file
+### TEST JOINED!!! Split bams file
 
 ```bash
 parallel --jobs 60 'bamtools split -in {} -reference' ::: *bam
