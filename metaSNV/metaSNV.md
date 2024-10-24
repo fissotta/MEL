@@ -155,6 +155,8 @@ rm *bam && rm *head && rename 's/_reheaded//' *reheaded
 # Sort BAM files
 for f in *bam; do samtools sort -@ 30 -o ${f%.bam}.sorted.bam $f; done
 
+#borrar bams originales
+
 # Index BAM files
 for f in *sorted.bam; do samtools index -@ 30 $f; done
 ```
