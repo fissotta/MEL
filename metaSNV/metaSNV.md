@@ -82,7 +82,9 @@ bpParam <- MulticoreParam(workers = min(N.CORES,length(species)),
                           logdir = paste0(OUT.DIR,"/threadLogs"))
 ```
 
-# References preparation
+# INPUT PREPARATION
+
+## References preparation
 
 ### Join with 100 Ns
 
@@ -124,6 +126,8 @@ while read l; do while read i; do echo coverm genome --methods length covered_ba
 #Comando
 coverm genome --methods length covered_bases covered_fraction count mean relative_abundance rpkm --min-read-aligned-length 45 --min-read-percent-identity 97 --min-covered-fraction 0 --discard-unmapped --output-format sparse --genome-fasta-directory referencias --genome-fasta-extension fna --bam-file-cache-directory COVERM_BAMs --threads 40 --output-file COVERM_STATS.txt -1 /media/WALLROSE/FASTQ_MG/S10_2019_1.fq -2 /media/WALLROSE/FASTQ_MG/S10_2019_2.fq  -1 /media/WALLROSE/FASTQ_MG/S16_2020_1.fq -2 /media/WALLROSE/FASTQ_MG/S16_2020_2.fq  -1 /media/WALLROSE/FASTQ_MG/S17_2020_1.fq -2 /media/WALLROSE/FASTQ_MG/S17_2020_2.fq  -1 /media/WALLROSE/FASTQ_MG/S3_2019_1.fq -2 /media/WALLROSE/FASTQ_MG/S3_2019_2.fq  -1 /media/WALLROSE/FASTQ_MG/S4_2019_1.fq -2 /media/WALLROSE/FASTQ_MG/S4_2019_2.fq  -1 /media/WALLROSE/FASTQ_MG/S6_2019_1.fq -2 /media/WALLROSE/FASTQ_MG/S6_2019_2.fq  -1 /media/WALLROSE/FASTQ_MG/S7_2020_1.fq -2 /media/WALLROSE/FASTQ_MG/S7_2020_2.fq  -1 /media/WALLROSE/FASTQ_MG/S8_2019_1.fq -2 /media/WALLROSE/FASTQ_MG/S8_2019_2.fq  
 ```
+
+## BAM preparation
 
 ### Rename bams
 
