@@ -185,6 +185,11 @@ for f in *sorted.bam; do samtools index -@ 30 $f; done
 #Clean names
 rename 's/_COVERM_coverm-genome\.//' *ba*;
 ```
+
+![My Badge](https://img.shields.io/badge/Label-Text-Blue)
+
+
+
 ### TEST JOINED!!! Split bams file
 
 ```bash
