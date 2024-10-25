@@ -134,6 +134,11 @@ for folder in *COVERM/; do
 done
 ```
 
+### Move bams
+```bash
+mkdir bams && mv *COVERM/* bams/ && rm -r *COVERM
+```
+
 ### Check Headers if the header does not match the reference
 
 ```bash
