@@ -177,11 +177,14 @@ rm *bam && rm *head && rename 's/_reheaded//' *reheaded;
 for f in *bam; do samtools sort -@ 30 -o ${f%.bam}.sorted.bam $f; done
 
 #borrar bams originales
+rm *fq.bam && rename 's/fq\.//' *bam;
 
 # Index BAM files
 for f in *sorted.bam; do samtools index -@ 30 $f; done
-```
 
+#Clean names
+rename 's/_COVERM_coverm-genome\.//' *ba*;
+```
 ### TEST JOINED!!! Split bams file
 
 ```bash
