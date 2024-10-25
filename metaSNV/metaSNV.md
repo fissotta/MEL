@@ -175,8 +175,7 @@ parallel --jobs 60 'bamtools split -in {} -reference' ::: *bam
 for file in *.fasta; do prodigal -i "$file" -o "${file%.fasta}.gff" -f gff -a "${file%.fasta}_proteins.faa"; done
 
 # Clean up GFF files
-sed -i '/Model/d' *gff
-sed -i '/Sequence/d' *gff
+sed -i '/Model/d' *gff && sed -i '/Sequence/d' *gff
 ```
 
 
@@ -208,10 +207,14 @@ samtools faidx NC_010175.fna
 
 ```bash
 # metaSNV run
-ls referencias/*fna > REFERENCES.txt
-while read l; do ls bams_coverm\/*$l* > $l\_bam.list ; done < REFERENCES.txt
+ls *fna > REFERENCES.txt
+sed -i 's/\.fna//g' REFERENCES.txt
 
-while read l; do echo metaSNV.py --threads 90 $l\_mSNV $l\_bam.list referencias/$l\_J.fna --db_ann referencias/$l\_J_metaSNV_annotations.txt; done < REFERENCES.txt > COVERM_CTFIA.sh
+#while read l; do ls bams_coverm\/*$l* > $l\_bam.list ; done < REFERENCES.txt
+while read l; do ls bams\/*$l*bam > $l\_bam.list; done < REFERENCES.txt
+
+#while read l; do echo metaSNV.py --threads 90 $l\_mSNV $l\_bam.list referencias/$l\.fna --db_ann referencias/$l\_J_metaSNV_annotations.txt; done < REFERENCES.txt > METASNV.sh
+while read l; do echo metaSNV.py --threads 20 $l\_mSNV $l\_bam.list referencias/$l\.fna --db_ann referencias/$l\_metaSNV_annotations.txt; done < REFERENCES.txt > METASNV.sh
 
 # MetaSNV Filtering
 for f in *_mSNV/; do metaSNV_Filtering.py --n_threads 30 $f; done
