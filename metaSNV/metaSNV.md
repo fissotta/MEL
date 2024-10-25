@@ -82,7 +82,7 @@ bpParam <- MulticoreParam(workers = min(N.CORES,length(species)),
                           logdir = paste0(OUT.DIR,"/threadLogs"))
 ```
 
-# Input Preparation
+# References preparation
 
 ### Join with 100 Ns
 
@@ -93,6 +93,22 @@ for f in *fna; do perl ../contigs_joiner.pl $f > ${f%.fna}_J.fna; done
 # Replace ".fasta" or ".fna" extensions
 sed -i 's/\.fasta//g' *_J.fasta
 sed -i 's/\.fna//g' *_J.fna
+
+# Generate GFF and protein files using Prodigal
+for file in *.fasta; do prodigal -i "$file" -o "${file%.fasta}.gff" -f gff -a "${file%.fasta}_proteins.faa"; done
+
+# Clean up GFF files
+sed -i '/Model/d' *gff && sed -i '/Sequence/d' *gff
+
+# GFF to metasnv format run gff2metaSNV_annotation.py
+parallel --jobs 60 'python3 gff2metaSNV_annotation.py {}' ::: *gff
+```
+
+### Convert GTF to GFF3
+
+```bash
+# Convert GTF to GFF3
+parallel --jobs 4 'agat_convert_sp_gxf2gxf.pl -g {} -o {}.gff3' ::: *gtf
 ```
 
 ### CoverM Genome Coverage
@@ -139,23 +155,20 @@ done
 mkdir bams && mv *COVERM/* bams/ && rm -r *COVERM
 ```
 
-### Check Headers if the header does not match the reference
-
+### Automated BAM Header Modification, Sorting, and Indexing Workflow
 ```bash
-# Extract and modify SAM header
-for f in *bam; do samtools view -H $f > ${f%.bam}.head; done
-sed -i -E '/^@SQ/ s/(SN:[^~[:space:]]+)~[^[:space:]]*/\1/' *head && sed -i '/^@SQ/ s/_J//g' *head
-for f in *head; do samtools reheader $f ${f%.head}\.bam > ${f%.head}\.bam_reheaded; done
-rm *bam && rm *head && rename 's/_reheaded//' *reheaded
+# Extract SAM headers from BAM files
+for f in *bam; do samtools view -H $f > ${f%.bam}.head; done; 
 
-#parallel --jobs 20 'samtools reheader header.sam {} > {}.rehead' ::: *bam
-#samtools view -H coverm-genome.S16_2020_1.fq.gz.bam > header.sam && nano header.sam
-```
+# Modify headers: remove part after '~' and strip '_J'
+sed -i -E '/^@SQ/ s/(SN:[^~[:space:]]+)~[^[:space:]]*/\1/' *head && sed -i '/^@SQ/ s/_J//g' *head; 
 
+# Reheader BAM files using modified headers
+for f in *head; do samtools reheader $f ${f%.head}\.bam > ${f%.head}\.bam_reheaded; done; 
 
-### Sort and Index BAM Files
+# Clean up: remove original BAMs, header files, and rename reheaded BAMs
+rm *bam && rm *head && rename 's/_reheaded//' *reheaded; 
 
-```bash
 # Sort BAM files
 for f in *bam; do samtools sort -@ 30 -o ${f%.bam}.sorted.bam $f; done
 
@@ -172,30 +185,7 @@ parallel --jobs 60 'bamtools split -in {} -reference' ::: *bam
 ```
 
 
-### Prodigal GFF Conversion
 
-```bash
-# Generate GFF and protein files using Prodigal
-for file in *.fasta; do prodigal -i "$file" -o "${file%.fasta}.gff" -f gff -a "${file%.fasta}_proteins.faa"; done
-
-# Clean up GFF files
-sed -i '/Model/d' *gff && sed -i '/Sequence/d' *gff
-```
-
-
-### GFF to metasnv format
-
-```bash
-# run gff2metaSNV_annotation.py
-parallel --jobs 60 'python3 gff2metaSNV_annotation.py {}' ::: *gff
-```
-
-### Convert GTF to GFF3
-
-```bash
-# Convert GTF to GFF3
-parallel --jobs 4 'agat_convert_sp_gxf2gxf.pl -g {} -o {}.gff3' ::: *gtf
-```
 
 ## Execution of metaSNV
 
