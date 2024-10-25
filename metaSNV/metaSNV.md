@@ -186,17 +186,11 @@ for f in *sorted.bam; do samtools index -@ 30 $f; done
 rename 's/_COVERM_coverm-genome\.//' *ba*;
 ```
 
-![My Badge](https://img.shields.io/badge/Label-Text-Blue)
-
-
-
-### TEST JOINED!!! Split bams file
+<h3 style="color: red;">TEST JOINED!!! Split bams file</h3>
 
 ```bash
 parallel --jobs 60 'bamtools split -in {} -reference' ::: *bam
 ```
-
-
 
 
 ## Execution of metaSNV
