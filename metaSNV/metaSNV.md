@@ -144,8 +144,7 @@ mkdir bams && mv *COVERM/* bams/ && rm -r *COVERM
 ```bash
 # Extract and modify SAM header
 for f in *bam; do samtools view -H $f > ${f%.bam}.head; done
-sed -i -E '/^@SQ/ s/(SN:[^~[:space:]]+)~[^[:space:]]*/\1/' *head
-sed -i '/^@SQ/ s/_J//g' *head
+sed -i -E '/^@SQ/ s/(SN:[^~[:space:]]+)~[^[:space:]]*/\1/' *head && sed -i '/^@SQ/ s/_J//g' *head
 for f in *head; do samtools reheader $f ${f%.head}\.bam > ${f%.head}\.bam_reheaded; done
 rm *bam && rm *head && rename 's/_reheaded//' *reheaded
 
