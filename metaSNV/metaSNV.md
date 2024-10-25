@@ -99,6 +99,9 @@ sed -i 's/\.fna//g' *_J.fna
 # Generate GFF and protein files using Prodigal
 for file in *.fasta; do prodigal -i "$file" -o "${file%.fasta}.gff" -f gff -a "${file%.fasta}_proteins.faa"; done
 
+#or
+for file in *.fna; do prodigal -i "$file" -o "${file%.fna}.gff" -f gff -a "${file%.fna}_proteins.faa"; done
+
 # Clean up GFF files
 sed -i '/Model/d' *gff && sed -i '/Sequence/d' *gff
 
