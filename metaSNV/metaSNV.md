@@ -119,7 +119,7 @@ coverm genome --methods length covered_bases covered_fraction count mean relativ
 #!/bin/bash
 
 # Iterate through each folder in the current directory
-for folder in */; do
+for folder in *COVERM/; do
     # Remove the trailing slash from the folder name
     folder_name=$(basename "$folder")
     
