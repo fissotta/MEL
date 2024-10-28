@@ -243,7 +243,11 @@ metaSNV_Filtering.py --n_threads 30 NC_010175_metaSNV
 
 ```bash
 # Filter using AWK script
-awk '{ delete_line=0; for (i=2; i<=NF; i++) if (($i+0) > 0 && ($i+0) < 0.05) { delete_line=1; break } } !delete_line'  S3_2020_Vamb_5.filtered.freq > S3_2020_Vamb_5.filtered_LB.freq
+for f in */filtered; do mkdir $f/LB; done
+
+for f in */filtered/pop/*freq; do awk '{ delete_line=0; if ($0 ~ /N>/) delete_line=1; for (i=2; i<=NF; i++) if (($i+0) > 0 && ($i+0) < 0.05) { delete_line=1; break } } !delete_line' $f > ${f%.freq}\_LB.freq ; done
+
+for f in */filtered/pop/*LB*; do mv $f ${f%/pop*}\/LB; done
 
 # Run DistDiv
 metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt NC_010175_metaSNV/filtered/pop/
