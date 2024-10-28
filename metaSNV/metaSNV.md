@@ -250,7 +250,8 @@ for f in */filtered/pop/*freq; do awk '{ delete_line=0; if ($0 ~ /N>/) delete_li
 for f in */filtered/pop/*LB*; do mv $f ${f%/pop*}\/LB; done
 
 # Run DistDiv
-metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt NC_010175_metaSNV/filtered/pop/
+#metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt NC_010175_metaSNV/filtered/pop/
+for f in */filtered/LB; do metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt $f; done
 
 # Subpopulation Analysis
 metaSNV_subpopr.R -i NC_010175_metaSNV -p 12
