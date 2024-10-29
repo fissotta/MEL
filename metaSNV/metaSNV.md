@@ -1,87 +1,3 @@
-# Installation
-
-```bash
-# Create a new environment and install metaSNV
-mamba create --name metaSNV -c bioconda -c conda-forge 'metasnv>=2.0.1'
-```
-
-[metaSNV GitHub Repository](https://github.com/metasnv-tool/metaSNV/tree/master)
-
-```bash
-# Activate the metaSNV environment
-mamba activate metaSNV
-```
-
-## FIX 1
-
-Download `htslib-1.11` from [here](https://sourceforge.net/projects/samtools/files/):
-
-```bash
-# Navigate to the htslib-1.11 directory and build
-cd htslib-1.11 && make
-```
-
-Download `samtools-1.11` from [here](https://sourceforge.net/projects/samtools/files/). Note: **Do not use the latest version** because `qaTools` requires a library called `sam.h` that has been renamed in later versions.
-
-```bash
-# Navigate to the samtools-1.11 directory and build
-cd samtools-1.11 && make
-
-# Clone qaTools repository
-git clone https://github.com/CosteaPaul/qaTools.git
-```
-
-Edit `qaTools` Makefile as described in the [qaTools GitHub](https://github.com/CosteaPaul/qaTools) so that `HTSLIB` and `SAMTOOLS` point to the `htslib-1.11` and `samtools-1.11` paths.
-
-```bash
-# Export library path
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/path/to/htslib-1.11"
-
-# Navigate to qaTools directory and build
-cd qaTools && make
-```
-
-### Modify `metaSNV.py`:
-Update:
-```python
-cmd = ['{}/src/qaTools/qaCompute'.format(basedir),
-```
-to:
-```python
-cmd = ['/path/to/qaTools/qaCompute',
-```
-
-Located in: `/path/to/anaconda3/share/metasnv-2.0.4/metaSNV.py`
-
-## FIX 2
-
-### Move Line in `metaSNV_subpopr.R`
-Find the script `metaSNV_subpopr.R` and move line 365 above line 358.
-
-**Before:**
-```r
-bpParam <- MulticoreParam(workers = min(N.CORES,length(species)),
-                          jobname = "subpopr",
-                          stop.on.error = FALSE,
-                          threshold = "DEBUG",
-                          log = TRUE,
-                          progressbar = printProgressBar,
-                          logdir = paste0(OUT.DIR,"/threadLogs"))
-dir.create(paste0(OUT.DIR,"/threadLogs"), recursive = T, showWarnings = FALSE)
-```
-
-**After:**
-```r
-dir.create(paste0(OUT.DIR,"/threadLogs"), recursive = T, showWarnings = FALSE)
-bpParam <- MulticoreParam(workers = min(N.CORES,length(species)),
-                          jobname = "subpopr",
-                          stop.on.error = FALSE,
-                          threshold = "DEBUG",
-                          log = TRUE,
-                          progressbar = printProgressBar,
-                          logdir = paste0(OUT.DIR,"/threadLogs"))
-```
-
 # INPUT PREPARATION
 
 ## References preparation
@@ -257,4 +173,90 @@ for f in *_metaSNV; do metaSNV_Filtering.py --n_threads 96 $f; done
 
 # DistDiv analysis without GFF
 for f in *_metaSNV; do metaSNV_DistDiv.py --n_threads 90 --dist --div --matched --filt $f/filtered/pop/; done
+```
+
+# ##########################################
+
+# Installation
+
+```bash
+# Create a new environment and install metaSNV
+mamba create --name metaSNV -c bioconda -c conda-forge 'metasnv>=2.0.1'
+```
+
+[metaSNV GitHub Repository](https://github.com/metasnv-tool/metaSNV/tree/master)
+
+```bash
+# Activate the metaSNV environment
+mamba activate metaSNV
+```
+
+## FIX 1
+
+Download `htslib-1.11` from [here](https://sourceforge.net/projects/samtools/files/):
+
+```bash
+# Navigate to the htslib-1.11 directory and build
+cd htslib-1.11 && make
+```
+
+Download `samtools-1.11` from [here](https://sourceforge.net/projects/samtools/files/). Note: **Do not use the latest version** because `qaTools` requires a library called `sam.h` that has been renamed in later versions.
+
+```bash
+# Navigate to the samtools-1.11 directory and build
+cd samtools-1.11 && make
+
+# Clone qaTools repository
+git clone https://github.com/CosteaPaul/qaTools.git
+```
+
+Edit `qaTools` Makefile as described in the [qaTools GitHub](https://github.com/CosteaPaul/qaTools) so that `HTSLIB` and `SAMTOOLS` point to the `htslib-1.11` and `samtools-1.11` paths.
+
+```bash
+# Export library path
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/path/to/htslib-1.11"
+
+# Navigate to qaTools directory and build
+cd qaTools && make
+```
+
+### Modify `metaSNV.py`:
+Update:
+```python
+cmd = ['{}/src/qaTools/qaCompute'.format(basedir),
+```
+to:
+```python
+cmd = ['/path/to/qaTools/qaCompute',
+```
+
+Located in: `/path/to/anaconda3/share/metasnv-2.0.4/metaSNV.py`
+
+## FIX 2
+
+### Move Line in `metaSNV_subpopr.R`
+Find the script `metaSNV_subpopr.R` and move line 365 above line 358.
+
+**Before:**
+```r
+bpParam <- MulticoreParam(workers = min(N.CORES,length(species)),
+                          jobname = "subpopr",
+                          stop.on.error = FALSE,
+                          threshold = "DEBUG",
+                          log = TRUE,
+                          progressbar = printProgressBar,
+                          logdir = paste0(OUT.DIR,"/threadLogs"))
+dir.create(paste0(OUT.DIR,"/threadLogs"), recursive = T, showWarnings = FALSE)
+```
+
+**After:**
+```r
+dir.create(paste0(OUT.DIR,"/threadLogs"), recursive = T, showWarnings = FALSE)
+bpParam <- MulticoreParam(workers = min(N.CORES,length(species)),
+                          jobname = "subpopr",
+                          stop.on.error = FALSE,
+                          threshold = "DEBUG",
+                          log = TRUE,
+                          progressbar = printProgressBar,
+                          logdir = paste0(OUT.DIR,"/threadLogs"))
 ```
