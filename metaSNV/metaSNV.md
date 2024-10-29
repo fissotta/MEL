@@ -109,13 +109,6 @@ sed -i '/Model/d' *gff && sed -i '/Sequence/d' *gff
 parallel --jobs 60 'python3 gff2metaSNV_annotation.py {}' ::: *gff
 ```
 
-### Convert GTF to GFF3
-
-```bash
-# Convert GTF to GFF3
-parallel --jobs 4 'agat_convert_sp_gxf2gxf.pl -g {} -o {}.gff3' ::: *gtf
-```
-
 ### CoverM Genome Coverage
 
 ##Considerar drep % identidad para el parametro --min-read-percent-identity, si es muy alto se pierde microdiversidad
@@ -222,13 +215,21 @@ while read l; do echo metaSNV.py --threads 20 $l\_mSNV $l\_bam.list referencias/
 # MetaSNV Filtering
 for f in *_mSNV/; do metaSNV_Filtering.py --n_threads 30 $f; done
 
-# Filter using AWK script
-awk '{ delete_line=0; for (i=2; i<=NF; i++) if (($i+0) > 0 && ($i+0) < 0.05) { delete_line=1; break } } !delete_line'  S3_2020_Vamb_5.filtered.freq > S3_2020_Vamb_5.filtered_LB.freq
+# Filter using AWK script [DILANAZ]
+for f in */filtered; do mkdir $f/LB; done
+
+for f in */filtered/pop/*freq; do awk '{ delete_line=0; if ($0 ~ /N>/) delete_line=1; for (i=2; i<=NF; i++) if (($i+0) > 0 && ($i+0) < 0.05) { delete_line=1; break } } !delete_line' $f > ${f%.freq}\_LB.freq ; done
+
+for f in */filtered/pop/*LB*; do mv $f ${f%/pop*}\/LB; done
 
 # Run DistDiv
-metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt NC_010175_metaSNV/filtered/pop/
+for f in */filtered/LB; do metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt $f; done
 
+#Get SNVs
+for f in */filtered/LB/*; do wc -l $f >> SNVS_005_noN.txt; done
 
+# Subpopulation Analysis
+metaSNV_subpopr.R -i NC_010175_metaSNV -p 12
 ```
 
 ```bash
@@ -239,29 +240,11 @@ metaSNV.py --threads 96 NC_010175_metaSNV NC_010175_bam.list references/NC_01017
 metaSNV_Filtering.py --n_threads 30 NC_010175_metaSNV
 ```
 
-### Fix LB
+### Convert GTF to GFF3
 
 ```bash
-# Filter using AWK script
-for f in */filtered; do mkdir $f/LB; done
-
-for f in */filtered/pop/*freq; do awk '{ delete_line=0; if ($0 ~ /N>/) delete_line=1; for (i=2; i<=NF; i++) if (($i+0) > 0 && ($i+0) < 0.05) { delete_line=1; break } } !delete_line' $f > ${f%.freq}\_LB.freq ; done
-
-for f in */filtered/pop/*LB*; do mv $f ${f%/pop*}\/LB; done
-
-# Run DistDiv
-#metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt NC_010175_metaSNV/filtered/pop/
-for f in */filtered/LB; do metaSNV_DistDiv.py --n_threads 30 --dist --div --divNS --matched --filt $f; done
-
-# Subpopulation Analysis
-metaSNV_subpopr.R -i NC_010175_metaSNV -p 12
-```
-
-### Generate GFF
-
-```bash
-# Generate GFF files using Prodigal
-for f in *fna; do prodigal -i $f -f gff -o ${f%.fna}.gff -a ${f%.fna}.faa; done
+# Convert GTF to GFF3
+parallel --jobs 4 'agat_convert_sp_gxf2gxf.pl -g {} -o {}.gff3' ::: *gtf
 ```
 
 ### MetaSNV Scripts
