@@ -98,7 +98,8 @@ for f in *sorted.bam; do samtools index -@ 30 $f; done
 rename 's/_COVERM_coverm-genome\.//' *ba*;
 ```
 
-##TEST JOINED
+## TEST JOINED
+
 ```bash
 #TEST JOINED!!! Split bams file
 #parallel --jobs 60 'bamtools split -in {} -reference' ::: *bam
@@ -138,7 +139,6 @@ if __name__ == "__main__":
     else:
         filter_sn_lines_inplace(sys.argv[1])
 ```
-
 
 ## Execution of metaSNV
 
