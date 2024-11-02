@@ -124,7 +124,7 @@ def filter_sn_lines_inplace(directory):
     for filename in os.listdir(directory):
         if filename.endswith(".head"):
             filepath = os.path.join(directory, filename)
-            target_sn = filename.split("REF_")[-1].replace(".head", "")  # Extract SN target based on filename
+            target_sn = filename.split("__")[-1].replace("_filtered.head", "")  # Extract SN target based on filename
             
             with open(filepath, 'r') as file:
                 lines = file.readlines()
