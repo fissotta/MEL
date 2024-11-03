@@ -104,87 +104,47 @@ rename 's/_COVERM_coverm-genome\.//' *ba*;
 ## TEST JOINED
 
 ```bash
-#Sort BAM files
-for f in *bam; do samtools sort -@ 10 -o ${f%.bam}.sorted.bam $f; done
+#Rename
+rename 's/coverm-genome.//' *.bam
 
-#Split bams file
-parallel --jobs 8 'bamtools split -in {} -reference' ::: *bam
+#Sort BAM files
+for f in *bam; do samtools sort -@ 60 -o ${f%.bam}.sorted.bam $f; done
+
+#borrar bams originales
+rm *fq.bam && rename 's/fq\.//' *bam;
 
 #Extract SAM headers from BAM files
 for f in *bam; do samtools view -H $f > ${f%.bam}.head; done
 
-```
+# Modify headers: remove part after '~' and strip '_J'
+sed -i -E '/^@SQ/ s/(SN:[^~[:space:]]+)~[^[:space:]]*/\1/' *head && sed -i '/^@SQ/ s/_J//g' *head; 
 
-```python
-# Modified multiple headers
-# Example usage: python filter_sn_lines.py /path/to/files/
-
-import os
-import sys
-
-def filter_sn_lines_inplace(directory):
-    # Iterate through each file in the directory
-    for filename in os.listdir(directory):
-        if filename.endswith(".head"):
-            filepath = os.path.join(directory, filename)
-            target_sn = filename.split("__")[-1].replace("_filtered.head", "")  # Extract SN target based on filename
-            
-            with open(filepath, 'r') as file:
-                lines = file.readlines()
-
-            # Filter lines: Keep @HD and @PG lines, and only the matching @SQ line
-            new_lines = [line for line in lines if line.startswith("@HD") or line.startswith("@PG") or 
-                         (line.startswith("@SQ") and f"SN:{target_sn}" in line)]
-
-            # Overwrite the original file with the filtered lines
-            with open(filepath, 'w') as file:
-                file.writelines(new_lines)
-            
-            print(f"Processed and modified {filepath}")
-
-# Pass the directory path as an argument when running the script
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python filter_sn_lines.py /path/to/files/")
-    else:
-        filter_sn_lines_inplace(sys.argv[1])
-```
-
-```bash
 # Reheader BAM files using modified headers
 for f in *head; do samtools reheader $f ${f%.head}\.bam > ${f%.head}\.bam_reheaded; done; 
 
 # Clean up: remove original BAMs, header files, and rename reheaded BAMs
 rm *bam && rm *head && rename 's/_reheaded//' *reheaded; 
 
-#borrar bams originales
-rm *fq.bam && rename 's/fq\.//' *bam;
-
-
-
-########
-# THIS #
-########
-
-
-#extract by reference
-samtools view -h -b S8_2019_1.sorted.REF_U9_2023_metawrap_50_15_bin_1.bam U9_2023_metawrap_50_15_bin_1 > output_filtered.bam
-
-#bam to sam
-samtools view -b -o output_filtered.bam output_filtered.sam
+#Sort BAM files
+for f in *bam; do samtools sort -@ 60 -o ${f%.bam}.sorted.bam $f; done
 
 # Index BAM files
 for f in *.bam; do samtools index -@ 30 $f; done
 
+#extract references from bams
+for f in *bam; do samtools view -H $f; done | grep SN | sort -u | sed 's/.*SN:\([^\t]*\).*/\1/' > referencias_extract.list
 
+#extract by reference
+for f in *sorted.bam; do while read -r l; do echo "samtools view -h -b $f $l > ${f%.sorted.bam}__${l}_filtered.bam"; done < referencias_extract.list; done > split_bams.sh
 
-########
-# THIS #
-########
+#move splited
+mkdir splited_bam && mv *__* splited_bam
 
+#Sort BAM files
+for f in *bam; do samtools sort -@ 60 -o ${f%.bam}.sorted.bam $f; done
 
-#Clean names
-rename 's/_COVERM_coverm-genome\.//' *ba*;
+# Index BAM files
+for f in *.bam; do samtools index -@ 30 $f; done
 ```
 
 
@@ -208,6 +168,8 @@ sed -i 's/\.fna//g' REFERENCES.txt
 
 #while read l; do ls bams_coverm\/*$l* > $l\_bam.list ; done < REFERENCES.txt
 while read l; do ls bams\/*$l*bam > $l\_bam.list; done < REFERENCES.txt
+#or
+while read l; do ls BAMS_SPLIT\/*${l%_J}*bam > $l\_bam.list; done < REFERENCES.txt
 
 #while read l; do echo metaSNV.py --threads 90 $l\_mSNV $l\_bam.list referencias/$l\.fna --db_ann referencias/$l\_J_metaSNV_annotations.txt; done < REFERENCES.txt > METASNV.sh
 while read l; do echo metaSNV.py --threads 20 $l\_mSNV $l\_bam.list referencias/$l\.fna --db_ann referencias/$l\_metaSNV_annotations.txt; done < REFERENCES.txt > METASNV.sh
