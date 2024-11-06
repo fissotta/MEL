@@ -9,14 +9,12 @@
 for f in *fna; do perl ../contigs_joiner.pl $f > ${f%.fna}_J.fna; done
 
 # Replace ".fasta" or ".fna" extensions
-sed -i 's/\.fasta//g' *_J.fasta
 sed -i 's/\.fna//g' *_J.fna
+sed -i 's/\.fasta//g' *_J.fasta
 
 # Generate GFF and protein files using Prodigal
-for file in *.fasta; do prodigal -i "$file" -o "${file%.fasta}.gff" -f gff -a "${file%.fasta}_proteins.faa"; done
-
-#or
 for file in *.fna; do prodigal -i "$file" -o "${file%.fna}.gff" -f gff -a "${file%.fna}_proteins.faa"; done
+for file in *.fasta; do prodigal -i "$file" -o "${file%.fasta}.gff" -f gff -a "${file%.fasta}_proteins.faa"; done
 
 # Clean up GFF files
 sed -i '/Model/d' *gff && sed -i '/Sequence/d' *gff
@@ -25,7 +23,7 @@ sed -i '/Model/d' *gff && sed -i '/Sequence/d' *gff
 parallel --jobs 60 'python3 gff2metaSNV_annotation.py {}' ::: *gff
 
 # Index the reference
-samtools faidx NC_010175.fna
+for f in *fna; do samtools faidx $f; done
 ```
 
 ### CoverM Genome Coverage
