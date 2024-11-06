@@ -139,6 +139,7 @@ for f in *bam; do samtools view -H $f; done | grep SN | sort -u | sed 's/.*SN:\(
 
 #extract by reference
 for f in *sorted.bam; do while read -r l; do echo "samtools view -h -b $f $l > ${f%.sorted.bam}__${l}_filtered.bam"; done < referencias_extract.list; done > split_bams.sh
+nohup bash -x split_bams.sh &
 
 #move splited
 mkdir splited_bam && mv *__* splited_bam
