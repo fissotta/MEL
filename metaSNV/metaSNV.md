@@ -127,8 +127,7 @@ rm *bam && rm *head && rename 's/_reheaded//' *reheaded
 for f in *bam; do samtools sort -@ 60 -o ${f%.bam}.sorted.bam $f; done
 
 #Rename
-#rm *019.sorted.bam
-#rm *020.sorted.bam
+#rm *019.sorted.bam && rm *020.sorted.bam
 rename 's/.sorted.bam/.bam/' *
 
 # Index BAM files
