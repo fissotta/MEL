@@ -121,7 +121,7 @@ sed -i -E '/^@SQ/ s/(SN:[^~[:space:]]+)~[^[:space:]]*/\1/' *head && sed -i '/^@S
 for f in *head; do samtools reheader $f ${f%.head}\.bam > ${f%.head}\.bam_reheaded; done; 
 
 # Clean up: remove original BAMs, header files, and rename reheaded BAMs
-rm *bam && rm *head && rename 's/_reheaded//' *reheaded; 
+rm *bam && rm *head && rename 's/_reheaded//' *reheaded
 
 #Sort BAM files
 for f in *bam; do samtools sort -@ 60 -o ${f%.bam}.sorted.bam $f; done
