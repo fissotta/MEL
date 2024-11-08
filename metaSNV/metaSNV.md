@@ -6,7 +6,8 @@
 
 ```bash
 # Joining contigs
-for f in *fna; do perl ../contigs_joiner.pl $f > ${f%.fna}_J.fna; done
+#for f in *fna; do perl ../contigs_joiner.pl $f > ${f%.fna}_J.fna; done
+parallel -j 90 'perl contigs_joiner.pl {} > {.}_J.fna' ::: *.fna
 
 # Replace ".fasta" or ".fna" extensions
 sed -i 's/\.fna//g' *_J.fna
