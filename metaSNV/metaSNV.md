@@ -6,8 +6,7 @@
 
 ```bash
 # Joining contigs
-#for f in *fna; do perl ../contigs_joiner.pl $f > ${f%.fna}_J.fna; done
-parallel -j 90 'perl contigs_joiner.pl {} > {.}_J.fna' ::: *.fna
+for f in *fna; do perl ../contigs_joiner.pl $f > ${f%.fna}_J.fna; done
 
 # Replace ".fasta" or ".fna" extensions
 sed -i 's/\.fna//g' *_J.fna
@@ -21,7 +20,7 @@ for file in *.fasta; do prodigal -i "$file" -o "${file%.fasta}.gff" -f gff -a "$
 sed -i '/Model/d' *gff && sed -i '/Sequence/d' *gff
 
 # GFF to metasnv format run gff2metaSNV_annotation.py
-parallel --jobs 60 'python3 gff2metaSNV_annotation.py {}' ::: *gff
+for f in *gff; do python3 gff2metaSNV_annotation.py $f; done
 
 # Index the reference
 for f in *fna; do samtools faidx $f; done
